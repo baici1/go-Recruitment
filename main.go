@@ -1,8 +1,27 @@
 package main
 
+
+// @title go-Recruitment
+// @version 1.0
+// @description 招新网站api 
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name yay
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost
+// @BasePath http://127.0.0.1:8090
+
+
+
 import (
 	"fmt"
 	"go-Recruitment/mysql"
+	"go-Recruitment/router"
 )
 
 
@@ -14,5 +33,5 @@ func main() {
 	}else{
 		fmt.Println("success")
 	}
-	//router.InitRoute()
+	router.InitRoute()
 }

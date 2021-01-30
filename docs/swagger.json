@@ -1,0 +1,21 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "招新网站api",
+        "title": "go-Recruitment",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "yay",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost",
+    "basePath": "http://127.0.0.1:8090",
+    "paths": {}
+}

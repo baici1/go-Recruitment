@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"fmt"
+	stu "go-Recruitment/dao"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -10,7 +11,11 @@ import (
 
 var db *sqlx.DB
 
-
+type User struct {
+	Id        int    `json:"id" valid:"required" form:"id"`
+	Stu_id    string `json:"stu_id" valid:"required" form:"stu_id"`
+	Password  string `json:"password" valid:"required" form:"password"`
+}
 
 //连接数据库
 func InitDB() error {
@@ -26,23 +31,12 @@ func InitDB() error {
 	return nil
 }
 
-type User struct {
-	ID        int    `json:"id" valid:"required" form:"id"`
-	Stu_id    string `json:"stu_id" valid:"required" form:"stu_id"`
-	Password  string `json:"password" valid:"required" form:"password"`
-}
+
 
 //查询------查询单个数据
 func Queryonedata(stu_id string ,password string) (User,error) {
 	var u User
 	sqlStr:="select id,stu_id,password from stu where stu_id=? and password=?"
-	// stmt,err:=db.Prepare(sqlStr)
-	// if err != nil {
-	// 	fmt.Printf("prepare failed, err:%v\n", err)
-	// 	return u
-	// }
-	//defer stmt.Close()
-	
 	err:=db.Get(&u,sqlStr,stu_id,password)
 	if err != nil {
 		if err != nil {
@@ -62,4 +56,39 @@ func Addonedata(stu_id string ,password string) error {
 		return err
 	}
 	return nil
+}
+
+//更新数据
+func UpdateoneForm(real_name string,group_id,sex int ,college,major,phone,qq string,result,code int,stu_id string) error {
+	sqlStr:="update stu set real_name=?,group_id=?,sex=?,college=?,major=?,phone=?,qq=?,result=?,code=? where stu_id=?"
+	_,err:=db.Exec(sqlStr,real_name,group_id,sex,college,major,phone,qq ,result,code,stu_id)
+	if err != nil {
+		fmt.Printf("update failed, err:%v\n", err)
+		return err
+	}
+	return nil
+}
+
+//查询数据
+func Querydata(stu_id string) (stu.User,error) {
+	sqlStr:="select * from stu where stu_id=?"
+	var all stu.User
+	err:=db.Get(&all,sqlStr,stu_id)
+	if err != nil {
+		fmt.Printf("get failed, err:%v\n", err)
+			return all,err
+	}
+	return all,nil
+}
+
+func Queryalldata() ([]stu.User,error) {
+	sqlStr:="select * from stu"
+	var all []stu.User
+	err:=db.Select(&all,sqlStr)
+	// fmt.Println(all[1])
+	if err != nil {
+		fmt.Printf("query failed, err:%v\n", err)
+		return all,err
+	}
+	return all,nil
 }
