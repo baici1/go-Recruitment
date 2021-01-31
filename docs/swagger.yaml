@@ -1,4 +1,4 @@
-host: 127.0.0.1:8090
+host: 127.0.0.1:8080
 info:
   contact:
     email: support@swagger.io
@@ -12,8 +12,27 @@ info:
   title: go-Recruitment
   version: "1.0"
 paths:
+  /download:
+    get:
+      consumes:
+      - multipart/form-data
+      description: 用于数据库数据下载成excel
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: msg":"下载成功
+          schema:
+            type: json
+        "408":
+          description: 请求时间超时,下载失败
+        "500":
+          description: 获取全部信息失败
+      summary: 用于数据库数据下载成excel
   /login:
     post:
+      consumes:
+      - multipart/form-data
       description: 用于招新网站的登录
       parameters:
       - description: 学号
@@ -26,6 +45,8 @@ paths:
         name: password
         required: true
         type: string
+      produces:
+      - application/json
       responses:
         "200":
           description: msg":"登录成功","token":token,"code":200,"data":{}
@@ -35,4 +56,127 @@ paths:
           description: 未找到此用户
         "500":
           description: 获取账号信息出错
+      summary: 获取账号进行登录
+  /register:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 用于招新网站的注册
+      parameters:
+      - description: 学号
+        in: formData
+        name: stu_id
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: msg":"注册成功","token":token,"code":200,"data":{}
+          schema:
+            type: json
+        "403":
+          description: 用户已存在
+        "404":
+          description: 未找到此用户
+        "500":
+          description: 获取账号信息出错
+      summary: 用于注册
+  /user/alldata:
+    get:
+      consumes:
+      - multipart/form-data
+      description: 用于获取个人全部信息
+      parameters:
+      - description: 学号
+        in: query
+        name: stu_id
+        required: true
+        type: string
+      - description: 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: msg":"获取成功
+          schema:
+            type: json
+        "404":
+          description: 未找到此用户
+        "500":
+          description: 获取信息失败
+      summary: 用于获取个人全部信息
+  /user/form:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 用于招新网站的表单信息
+      parameters:
+      - description: 学号
+        in: formData
+        name: stu_id
+        required: true
+        type: string
+      - description: 真实姓名
+        in: formData
+        name: real_name
+        type: string
+      - description: 1开发组2智能组
+        in: formData
+        name: group_id
+        type: integer
+      - description: 1男2女
+        in: formData
+        name: sex
+        type: integer
+      - description: 学院
+        in: formData
+        name: college
+        type: string
+      - description: 专业
+        in: formData
+        name: major
+        type: string
+      - description: 手机
+        in: formData
+        name: phone
+        type: string
+      - description: qq
+        in: formData
+        name: qq
+        type: string
+      - description: 结果:1录取   0未录取
+        in: formData
+        name: result
+        type: integer
+      - description: 成绩
+        in: formData
+        name: code
+        type: integer
+      - description: 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: msg":"获取成功
+          schema:
+            type: json
+        "403":
+          description: 提交表单数据出错
+        "500":
+          description: 获取表单数据出错
+      summary: 获取表单信息
 swagger: "2.0"

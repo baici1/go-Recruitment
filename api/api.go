@@ -14,6 +14,9 @@ import (
 
 //@Title 登录
 //@Description 用于招新网站的登录
+//@Summary 获取账号进行登录
+//@Accept multipart/form-data
+//@Produce application/json
 //@Param stu_id formData string true "学号"
 //@Param password formData string true "密码"
 //@Success 200 {json} json ""msg":"登录成功","token":token,"code":200,"data":{}"
@@ -21,7 +24,6 @@ import (
 //@Failure 404 "未找到此用户"
 //@Router /login [POST]
 func Login(c *gin.Context) {
-	
 	var u mysql.User
 	err:=c.ShouldBind(&u)
 	if err != nil {
@@ -52,7 +54,24 @@ func Login(c *gin.Context) {
 		})
 	}
 }
-//注册
+
+
+
+
+
+
+//@Title 注册
+//@Description 用于招新网站的注册
+//@Summary 用于注册
+//@Accept multipart/form-data
+//@Produce application/json
+//@Param stu_id formData string true "学号"
+//@Param password formData string true "密码"
+//@Success 200 {json} json ""msg":"注册成功","token":token,"code":200,"data":{}"
+//@Failure 500 "获取账号信息出错"
+//@Failure 404 "未找到此用户"
+//@Failure 403 "用户已存在"
+//@Router /register [POST]
 func Register(c *gin.Context)  {
 	 var f stu.User
 	var u mysql.User
@@ -70,7 +89,7 @@ func Register(c *gin.Context)  {
 	if err==nil {
 		c.JSON(500,gin.H{
 			"msg":"此用户已存在",
-			"code":500,
+			"code":403,
 		})
 		return
 	}
@@ -98,7 +117,26 @@ func Register(c *gin.Context)  {
 	}
 }
 
-//报名信息
+//@Title 报名信息
+//@Description 用于招新网站的表单信息
+//@Summary 获取表单信息
+//@Accept multipart/form-data
+//@Produce application/json
+//@Param stu_id formData string true "学号"
+//@Param real_name formData string false "真实姓名"
+//@Param group_id formData int false "1开发组2智能组"
+//@Param sex formData int false "1男2女"
+//@Param college formData string false "学院"
+//@Param major formData string false "专业"
+//@Param phone formData string false "手机"
+//@Param qq formData string false "qq"
+//@Param result formData int false "结果:1录取   0未录取"
+//@Param code formData int false "成绩"
+//@Param Authorization header string true "用户令牌"
+//@Success 200 {json} json ""msg":"获取成功""
+//@Failure 500 "获取表单数据出错"
+//@Failure 403 "提交表单数据出错"
+//@Router /user/form [POST]
 func Postform(c *gin.Context)  {
 	var f stu.User
 	err:=c.ShouldBind(&f)
@@ -112,8 +150,8 @@ func Postform(c *gin.Context)  {
 	err=mysql.UpdateoneForm(f.Real_name,f.Group_id,f.Sex,f.College,f.Major,f.Phone,f.Qq,f.Result,f.Code,f.Stu_id)
 	if err != nil {
 		c.JSON(500,gin.H{
-			"msg":"获取表单数据出错",
-			"code":500,
+			"msg":"提交表单数据出错",
+			"code":403,
 		})
 		return 
 	}
@@ -135,7 +173,17 @@ func Postform(c *gin.Context)  {
 	})
 }
 
-//获取所有信息
+//@Title 获取个人全部信息
+//@Description 用于获取个人全部信息
+//@Summary 用于获取个人全部信息
+//@Accept multipart/form-data
+//@Produce application/json
+//@Param stu_id query string true "学号"
+//@Param Authorization header string true "用户令牌"
+//@Success 200 {json} json ""msg":"获取成功""
+//@Failure 500 "获取信息失败"
+//@Failure 404 "未找到此用户"
+//@Router /user/alldata [GET]
 func Alldata(c *gin.Context){
 	var all stu.User
 	err:=c.ShouldBind(&all)
@@ -162,13 +210,24 @@ func Alldata(c *gin.Context){
 }
 
 
-//将数据库中数据生成excel
-
+//@Title 获取数据库数据下载成excel
+//@Description 用于数据库数据下载成excel
+//@Summary 用于数据库数据下载成excel
+//@Accept multipart/form-data
+//@Produce application/json
+//@Success 200 {json} json ""msg":"下载成功""
+//@Failure 500 "获取全部信息失败"
+//@Failure 408 "请求时间超时,下载失败"
+//@Router /download [GET]
 func Getexcel(c *gin.Context)  {
 	// var rows=[...]string{"A","B","C","D","E","F","G","H","I","J","K","L"}
 	all,err:=mysql.Queryalldata()
 	if err != nil {
-		fmt.Println("failed")
+		c.JSON(500,gin.H{
+			"msg":"获取全部信息失败",
+			"code":500,
+		})
+		return
 	}
 	xlsx := excelize.NewFile()
 	xlsx.SetCellValue("Sheet1","A1","ID")
@@ -211,6 +270,17 @@ func Getexcel(c *gin.Context)  {
 	c.Header("Content-Transfer-Encoding", "binary")
 
 	//回写到web 流媒体 形成下载
-	_ = xlsx.Write(c.Writer)
+	err = xlsx.Write(c.Writer)
+	if err != nil {
+		c.JSON(408,gin.H{
+			"msg":"请求时间超时,下载失败",
+			"code":408,
+		})
+		return
+	}
+	c.JSON(200,gin.H{
+		"code":200,
+		"msg":"下载成功",
+	})
 }
 

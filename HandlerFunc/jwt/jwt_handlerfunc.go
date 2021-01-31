@@ -2,6 +2,7 @@ package JWT
 
 import (
 	"fmt"
+	"go-Recruitment/mysql"
 	"go-Recruitment/tool/jwt"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,8 @@ import (
 //jwt中间件
 func JWTAuthMiddleware(c *gin.Context) {
 	authHandler := c.Request.Header.Get("Authorization")//获取请求头中的token
+	var u mysql.User
+	err:=c.ShouldBind(&u)
 	if authHandler==""{
 		c.JSON(404,gin.H{
 			"code": "404",
@@ -19,6 +22,14 @@ func JWTAuthMiddleware(c *gin.Context) {
 		return
 	}
 	token, err := jwt.ParseToken(authHandler)//解析token
+	if token.Stu_id!=u.Stu_id{
+		c.JSON(500, gin.H{
+			"code": 500,
+			"msg":  "token错误",
+		})
+		c.Abort()
+		return
+	}
 	fmt.Println(token)
 	if err != nil {
 		c.JSON(500, gin.H{

@@ -15,11 +15,44 @@
         },
         "version": "1.0"
     },
-    "host": "127.0.0.1:8090",
+    "host": "127.0.0.1:8080",
     "paths": {
+        "/download": {
+            "get": {
+                "description": "用于数据库数据下载成excel",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "用于数据库数据下载成excel",
+                "responses": {
+                    "200": {
+                        "description": "msg\":\"下载成功",
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    "408": {
+                        "description": "请求时间超时,下载失败"
+                    },
+                    "500": {
+                        "description": "获取全部信息失败"
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "用于招新网站的登录",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取账号进行登录",
                 "parameters": [
                     {
                         "type": "string",
@@ -48,6 +81,189 @@
                     },
                     "500": {
                         "description": "获取账号信息出错"
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "description": "用于招新网站的注册",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "用于注册",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "学号",
+                        "name": "stu_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "msg\":\"注册成功\",\"token\":token,\"code\":200,\"data\":{}",
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    "403": {
+                        "description": "用户已存在"
+                    },
+                    "404": {
+                        "description": "未找到此用户"
+                    },
+                    "500": {
+                        "description": "获取账号信息出错"
+                    }
+                }
+            }
+        },
+        "/user/alldata": {
+            "get": {
+                "description": "用于获取个人全部信息",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "用于获取个人全部信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "学号",
+                        "name": "stu_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "msg\":\"获取成功",
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    "404": {
+                        "description": "未找到此用户"
+                    },
+                    "500": {
+                        "description": "获取信息失败"
+                    }
+                }
+            }
+        },
+        "/user/form": {
+            "post": {
+                "description": "用于招新网站的表单信息",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取表单信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "学号",
+                        "name": "stu_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "真实姓名",
+                        "name": "real_name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "1开发组2智能组",
+                        "name": "group_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "1男2女",
+                        "name": "sex",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "学院",
+                        "name": "college",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "专业",
+                        "name": "major",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "手机",
+                        "name": "phone",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "qq",
+                        "name": "qq",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "结果:1录取   0未录取",
+                        "name": "result",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "成绩",
+                        "name": "code",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "msg\":\"获取成功",
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    "403": {
+                        "description": "提交表单数据出错"
+                    },
+                    "500": {
+                        "description": "获取表单数据出错"
                     }
                 }
             }
