@@ -20,7 +20,7 @@ type User struct {
 //连接数据库
 func InitDB() error {
 	var err error
-	dsn := "root:123456@tcp(127.0.0.1:3306)/qmx?charset=utf8mb4&parseTime=True"
+	dsn := "qmx:123456@tcp(47.113.203.60:3306)/qmx?charset=utf8mb4&parseTime=True"
 	db,err=sqlx.Connect("mysql",dsn)//进行连接
 	if err != nil {
 		fmt.Printf("connect DB failed, err:%v\n", err)

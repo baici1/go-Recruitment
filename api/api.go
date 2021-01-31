@@ -12,28 +12,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
-// GetPostListHandler2 升级版帖子列表接口
-// @Summary 升级版帖子列表接口
-// @Description 可按社区按时间或分数排序查询帖子列表接口
-// @Tags 帖子相关接口
-// @Accept application/json
-// @Produce application/json
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Param object query models.ParamPostList false "查询参数"
-// @Security ApiKeyAuth
-// @Success 200 {object} _ResponsePostList
-// @Router /posts2 [get]
-
-
-
-//登录
+//@Title 登录
+//@Description 用于招新网站的登录
+//@Param stu_id formData string true "学号"
+//@Param password formData string true "密码"
+//@Success 200 {json} json ""msg":"登录成功","token":token,"code":200,"data":{}"
+//@Failure 500 "获取账号信息出错"
+//@Failure 404 "未找到此用户"
+//@Router /login [POST]
 func Login(c *gin.Context) {
 	
 	var u mysql.User
 	err:=c.ShouldBind(&u)
-	
 	if err != nil {
 		c.JSON(500,gin.H{
 			"msg":"获取账号信息出错",

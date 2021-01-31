@@ -15,7 +15,7 @@ import (
 func InitRoute() {
 	r := gin.Default()
 	r.Use(middleware.Cors())//跨域处理
-	r.GET("/login",api.Login )//登录
+	r.POST("/login",api.Login )//登录
 	r.POST("/register",api.Register)//注册
 	userGroup:=r.Group("/user")
 	{
@@ -24,5 +24,5 @@ func InitRoute() {
 	}
 	r.GET("/download",api.Getexcel)
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
-	r.Run(":8090")
+	r.Run(":8080")
 }

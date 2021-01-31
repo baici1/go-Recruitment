@@ -32,7 +32,43 @@ var doc = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/login": {
+            "post": {
+                "description": "用于招新网站的登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "学号",
+                        "name": "stu_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "msg\":\"登录成功\",\"token\":token,\"code\":200,\"data\":{}",
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    "404": {
+                        "description": "未找到此用户"
+                    },
+                    "500": {
+                        "description": "获取账号信息出错"
+                    }
+                }
+            }
+        }
+    }
 }`
 
 type swaggerInfo struct {
@@ -47,8 +83,8 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "localhost",
-	BasePath:    "http://127.0.0.1:8090",
+	Host:        "127.0.0.1:8090",
+	BasePath:    "",
 	Schemes:     []string{},
 	Title:       "go-Recruitment",
 	Description: "招新网站api",

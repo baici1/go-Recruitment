@@ -1,5 +1,4 @@
-basePath: http://127.0.0.1:8090
-host: localhost
+host: 127.0.0.1:8090
 info:
   contact:
     email: support@swagger.io
@@ -12,5 +11,28 @@ info:
   termsOfService: http://swagger.io/terms/
   title: go-Recruitment
   version: "1.0"
-paths: {}
+paths:
+  /login:
+    post:
+      description: 用于招新网站的登录
+      parameters:
+      - description: 学号
+        in: formData
+        name: stu_id
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: msg":"登录成功","token":token,"code":200,"data":{}
+          schema:
+            type: json
+        "404":
+          description: 未找到此用户
+        "500":
+          description: 获取账号信息出错
 swagger: "2.0"
