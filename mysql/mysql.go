@@ -81,6 +81,7 @@ func Querydata(stu_id string) (stu.User,error) {
 	return all,nil
 }
 
+//获取mysql全部学生信息
 func Queryalldata() ([]stu.User,error) {
 	sqlStr:="select * from stu"
 	var all []stu.User
@@ -91,4 +92,15 @@ func Queryalldata() ([]stu.User,error) {
 		return all,err
 	}
 	return all,nil
+}
+
+//删除单个成员信息
+func Deletedata(stu_id string) error {
+	sqlStr:="delete from stu where stu_id=?"
+	_,err:=db.Exec(sqlStr,stu_id)
+	if err != nil {
+		fmt.Printf("delete failed, err:%v\n", err)
+		return err
+	}
+	return nil
 }

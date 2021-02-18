@@ -230,7 +230,7 @@ func Getexcel(c *gin.Context)  {
 		return
 	}
 	xlsx := excelize.NewFile()
-	xlsx.SetCellValue("Sheet1","A1","ID")
+	xlsx.SetCellValue("Sheet1","A1","ID")// 设置单元格的值
 	xlsx.SetCellValue("Sheet1","B1","Stu_id")
 	xlsx.SetCellValue("Sheet1","C1","Password")
 	xlsx.SetCellValue("Sheet1","D1","Real_name")
@@ -264,13 +264,15 @@ func Getexcel(c *gin.Context)  {
 
 	//保存文件方式
 	//_ = xlsx.SaveAs("./aaa.xlsx")
+	if err := xlsx.SaveAs("students.xlsx"); err != nil {
+		fmt.Println(err)
+}
+	// c.Header("Content-Type", "application/octet-stream")
+	// c.Header("Content-Disposition", "attachment; filename="+"Workbook.xlsx")
+	// c.Header("Content-Transfer-Encoding", "binary")
 
-	c.Header("Content-Type", "application/octet-stream")
-	c.Header("Content-Disposition", "attachment; filename="+"Workbook.xlsx")
-	c.Header("Content-Transfer-Encoding", "binary")
-
-	//回写到web 流媒体 形成下载
-	err = xlsx.Write(c.Writer)
+	// //回写到web 流媒体 形成下载
+	// err = xlsx.Write(c.Writer)
 	if err != nil {
 		c.JSON(408,gin.H{
 			"msg":"请求时间超时,下载失败",
@@ -284,3 +286,54 @@ func Getexcel(c *gin.Context)  {
 	})
 }
 
+//@Title 获取mysql全部信息
+//@Summary 获取mysql全部信息
+//@Description 用于后台页面获取全部信息
+//@Success 200 {json} json ""msg":"获取全部学生信息成功","
+//@Failure 500 "获取全部信息失败"
+//@Router /getalldata [GET]
+func GetAlldatamysql(c *gin.Context){
+	all,err:=mysql.Queryalldata()
+	if err != nil {
+		c.JSON(500,gin.H{
+			"msg":"获取全部信息失败",
+			"code":500,
+		})
+		return
+	}
+	c.JSON(200,gin.H{
+		"msg":"获取全部学生信息成功",
+		"code":200,
+		"data":all,
+	})
+}
+
+//@Summary 删除单个信息
+//@Description 用于删除单个信息
+//@Accept multipart/form-data
+//@Produce application/json
+//@Param stu_id query string true "学号"
+//@Param Authorization header string true "用户令牌"
+func DeleteData(c *gin.Context)  {
+	var all stu.User
+	err:=c.ShouldBind(&all)
+	if err != nil {
+		c.JSON(500,gin.H{
+			"msg":"获取信息失败",
+			"code":500,
+		})
+		return 
+	}
+	err=mysql.Deletedata(all.Stu_id)
+	if err != nil {
+		c.JSON(500,gin.H{
+			"msg":"删除信息失败",
+			"code":500,
+		})
+		return 
+	}
+	c.JSON(200,gin.H{
+		"msg":"删除信息成功",
+		"code":200,
+	})
+}

@@ -23,6 +23,8 @@ func InitRoute() {
 		userGroup.GET("/alldata",JWT.JWTAuthMiddleware,api.Alldata)
 	}
 	r.GET("/download",api.Getexcel)
+	r.GET("/getalldata",api.GetAlldatamysql)
+	r.POST("/delete",api.DeleteData)
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 	r.Run(":8080")
 }
