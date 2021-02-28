@@ -33,6 +33,41 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/delete": {
+            "get": {
+                "description": "用于删除单个信息",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "删除单个信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "学号",
+                        "name": "stu_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "msg\":\"删除信息成功",
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    "408": {
+                        "description": "请求时间超时,删除信息失败"
+                    },
+                    "500": {
+                        "description": "获取全部信息失败"
+                    }
+                }
+            }
+        },
         "/download": {
             "get": {
                 "description": "用于数据库数据下载成excel",
@@ -42,7 +77,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "用于数据库数据下载成excel",
+                "summary": "用于数据库数据下载成excel(直接调用api)",
                 "responses": {
                     "200": {
                         "description": "msg\":\"下载成功",
@@ -52,6 +87,112 @@ var doc = `{
                     },
                     "408": {
                         "description": "请求时间超时,下载失败"
+                    },
+                    "500": {
+                        "description": "获取全部信息失败"
+                    }
+                }
+            }
+        },
+        "/form": {
+            "post": {
+                "description": "用于招新网站的表单信息",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取表单信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "学号",
+                        "name": "stu_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "真实姓名",
+                        "name": "real_name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "1开发组0智能组",
+                        "name": "group_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "0男1女",
+                        "name": "sex",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "学院",
+                        "name": "college",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "专业",
+                        "name": "major",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "手机",
+                        "name": "phone",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "qq",
+                        "name": "qq",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "结果:1录取   0未录取",
+                        "name": "result",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "成绩",
+                        "name": "code",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "msg\":\"获取成功",
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    "403": {
+                        "description": "提交表单数据出错"
+                    },
+                    "500": {
+                        "description": "获取表单数据出错"
+                    }
+                }
+            }
+        },
+        "/getalldata": {
+            "get": {
+                "description": "用于后台页面获取全部信息",
+                "summary": "获取mysql全部信息",
+                "responses": {
+                    "200": {
+                        "description": "msg\":\"获取全部学生信息成功\",",
+                        "schema": {
+                            "type": "json"
+                        }
                     },
                     "500": {
                         "description": "获取全部信息失败"
@@ -76,18 +217,11 @@ var doc = `{
                         "name": "stu_id",
                         "in": "formData",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "密码",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "msg\":\"登录成功\",\"token\":token,\"code\":200,\"data\":{}",
+                        "description": "msg\":\"登录成功\",\"token\":token,\"code\":20000,\"data\":{}",
                         "schema": {
                             "type": "json"
                         }
@@ -118,18 +252,11 @@ var doc = `{
                         "name": "stu_id",
                         "in": "formData",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "密码",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "msg\":\"注册成功\",\"token\":token,\"code\":200,\"data\":{}",
+                        "description": "msg\":\"注册成功\",\"token\":token,\"code\":20000,\"data\":{}",
                         "schema": {
                             "type": "json"
                         }
@@ -142,6 +269,54 @@ var doc = `{
                     },
                     "500": {
                         "description": "获取账号信息出错"
+                    }
+                }
+            }
+        },
+        "/result": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "查询结果字段",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "学号",
+                        "name": "stu_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "手机",
+                        "name": "phone",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "qq",
+                        "name": "qq",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "msg\":\"查询结果成功 0:未进行测试 1:已录取 2:笔试录取 3:面试录取",
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    "408": {
+                        "description": "请求时间超时,获取结果失败"
+                    },
+                    "500": {
+                        "description": "获取结果失败"
                     }
                 }
             }
@@ -163,13 +338,6 @@ var doc = `{
                         "name": "stu_id",
                         "in": "query",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -181,23 +349,20 @@ var doc = `{
                     },
                     "404": {
                         "description": "未找到此用户"
-                    },
-                    "500": {
-                        "description": "获取信息失败"
                     }
                 }
             }
         },
         "/user/form": {
             "post": {
-                "description": "用于招新网站的表单信息",
+                "description": "用于招新网站后台的表单信息",
                 "consumes": [
                     "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "获取表单信息",
+                "summary": "更改表单信息(用于后台)",
                 "parameters": [
                     {
                         "type": "string",
@@ -213,14 +378,14 @@ var doc = `{
                         "in": "formData"
                     },
                     {
-                        "type": "integer",
-                        "description": "1开发组2智能组",
+                        "type": "string",
+                        "description": "1开发组0智能组",
                         "name": "group_id",
                         "in": "formData"
                     },
                     {
-                        "type": "integer",
-                        "description": "1男2女",
+                        "type": "string",
+                        "description": "0男1女",
                         "name": "sex",
                         "in": "formData"
                     },
@@ -249,23 +414,16 @@ var doc = `{
                         "in": "formData"
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "结果:1录取   0未录取",
                         "name": "result",
                         "in": "formData"
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "成绩",
                         "name": "code",
                         "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -299,7 +457,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "127.0.0.1:8080",
+	Host:        "127.0.0.1:8081",
 	BasePath:    "",
 	Schemes:     []string{},
 	Title:       "go-Recruitment",

@@ -1,7 +1,6 @@
 package router
 
 import (
-	JWT "go-Recruitment/HandlerFunc/jwt"
 	"go-Recruitment/api"
 	"go-Recruitment/tool/middleware"
 
@@ -19,12 +18,14 @@ func InitRoute() {
 	r.POST("/register",api.Register)//注册
 	userGroup:=r.Group("/user")
 	{
-		userGroup.POST("/form",JWT.JWTAuthMiddleware,api.Postform)
-		userGroup.GET("/alldata",JWT.JWTAuthMiddleware,api.Alldata)
+		userGroup.POST("/form",api.Postform)
+		userGroup.GET("/alldata",api.Alldata)
 	}
+	r.POST("/form",api.Postformdata)
 	r.GET("/download",api.Getexcel)
 	r.GET("/getalldata",api.GetAlldatamysql)
-	r.POST("/delete",api.DeleteData)
+	r.GET("/delete",api.DeleteData)
+	r.POST("/result",api.Getresult)
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
-	r.Run(":8080")
+	r.Run(":8081")
 }
