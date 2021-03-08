@@ -1,4 +1,4 @@
-host: 127.0.0.1:8081
+host: 47.113.203.60:8081
 info:
   contact:
     email: support@swagger.io
@@ -208,9 +208,9 @@ paths:
       - multipart/form-data
       description: 用于获取个人全部信息
       parameters:
-      - description: 学号
+      - description: 名字
         in: query
-        name: stu_id
+        name: real_name
         required: true
         type: string
       produces:

@@ -18,14 +18,14 @@ func InitRoute() {
 	r.POST("/register",api.Register)//注册
 	userGroup:=r.Group("/user")
 	{
-		userGroup.POST("/form",api.Postform)
+		userGroup.POST("/form",api.Postform)//提交表单信息
 		userGroup.GET("/alldata",api.Alldata)
 	}
-	r.POST("/form",api.Postformdata)
-	r.GET("/download",api.Getexcel)
-	r.GET("/getalldata",api.GetAlldatamysql)
-	r.GET("/delete",api.DeleteData)
-	r.POST("/result",api.Getresult)
-	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
+	r.POST("/form",api.Postformdata)//提交网站招新表单
+	r.GET("/download",api.Getexcel)//下载excel
+	r.GET("/getalldata",api.GetAlldatamysql)//获取所有的信息
+	r.GET("/delete",api.DeleteData)//删除
+	r.POST("/result",api.Getresult)//获取结果
+	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))//swagger
 	r.Run(":8081")
 }

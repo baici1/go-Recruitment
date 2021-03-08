@@ -81,10 +81,10 @@ func UpdateoneForm(real_name string,group_id,sex string ,college,major,phone,qq 
 }
 
 //查询数据
-func Querydata(stu_id string) (stu.User,error) {
-	sqlStr:="select * from stu where stu_id=?"
-	var all stu.User
-	err:=db.Get(&all,sqlStr,stu_id)
+func Querydata(real_name string) ([]stu.User,error) {
+	sqlStr:="select * from stu where real_name like ?"
+	var all []stu.User
+	err:=db.Select(&all,sqlStr,"%"+real_name+"%")
 	if err != nil {
 		fmt.Printf("Querydata get failed, err:%v\n", err)
 			return all,err

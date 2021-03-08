@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "127.0.0.1:8081",
+    "host": "47.113.203.60:8081",
     "paths": {
         "/delete": {
             "get": {
@@ -318,8 +318,8 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "学号",
-                        "name": "stu_id",
+                        "description": "名字",
+                        "name": "real_name",
                         "in": "query",
                         "required": true
                     }

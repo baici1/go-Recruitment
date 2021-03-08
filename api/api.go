@@ -247,13 +247,13 @@ func Postformdata(c *gin.Context)  {
 //@Summary 用于获取个人全部信息
 //@Accept multipart/form-data
 //@Produce application/json
-//@Param stu_id query string true "学号"
+//@Param real_name query string true "名字"
 //@Success 200 {json} json ""msg":"获取成功""
 //@Failure 404 "未找到此用户"
 //@Router /user/alldata [GET]
 func Alldata(c *gin.Context){
-	var all stu.User
-	stuID:=c.Query("stu_id")
+	var all []stu.User
+	real_name:=c.Query("real_name")
 	// if err != nil {
 	// 	c.JSON(500,gin.H{
 	// 		"msg":"获取信息失败",
@@ -262,7 +262,7 @@ func Alldata(c *gin.Context){
 	// 	return 
 	// }
 	// fmt.Println(stuID)
-	all,err:=mysql.Querydata(stuID)
+	all,err:=mysql.Querydata(real_name)
 	if err != nil {
 		c.JSON(404,gin.H{
 			"msg":"未找到此用户",
