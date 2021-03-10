@@ -87,3 +87,9 @@ insert into 表名 (字段名称1,字段名称2) values (值1,值2)
 > *$ 删除所有的数据*
 
 > *delete from stu;*
+
+# 模糊查询
+
+`like` 
+
+[注意的地方](https://www.cnblogs.com/huangliang-hb/p/10048666.html)
