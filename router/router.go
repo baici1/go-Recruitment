@@ -1,7 +1,8 @@
 package router
 
 import (
-	"go-Recruitment/api"
+	"go-Recruitment/api/api"
+	"go-Recruitment/api/api_stu"
 	"go-Recruitment/tool/middleware"
 
 	_ "go-Recruitment/docs"
@@ -27,5 +28,10 @@ func InitRoute() {
 	r.GET("/delete",api.DeleteData)//删除
 	r.POST("/result",api.Getresult)//获取结果
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))//swagger
+	des:=r.Group("/des")
+	{
+		des.POST("/update",api_stu.Updatedes)
+		des.GET("/get",api_stu.Getdes)
+	}
 	r.Run(":8081")
 }

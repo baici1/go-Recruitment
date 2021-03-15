@@ -61,7 +61,9 @@ func Addonedata(stu_id string) error {
 //增加----add一条数据
 func Addalldata(stu_id ,real_name ,group_id,sex,college,major,phone,qq string ) error {
 	sqlStr:="insert into stu (stu_id ,real_name ,group_id,sex,college,major,phone,qq) values (?,?,?,?,?,?,?,?)"
+	sqlstr:="insert into description (stu_id) values (?)"//,comments,code,self_study,attach,development,ready,degree
 	_,err:=db.Exec(sqlStr,stu_id ,real_name ,group_id,sex,college,major,phone,qq)
+	_,err=db.Exec(sqlstr,stu_id)
 	if err != nil {
 		fmt.Printf("Addalldata insert failed, err:%v\n", err)
 		return err
@@ -108,7 +110,9 @@ func Queryalldata(limit string,offset int) ([]stu.User,error) {
 //删除单个成员信息
 func Deletedata(stu_id string) error {
 	sqlStr:="delete from stu where stu_id=?"
+	sql:="delete from description where stu_id=?"
 	_,err:=db.Exec(sqlStr,stu_id)
+	_,err=db.Exec(sql,stu_id)
 	if err != nil {
 		fmt.Printf("Deletedata delete failed, err:%v\n", err)
 		return err
@@ -122,10 +126,65 @@ func Queryfield(stu_id ,phone,qq string ) (stu.User,error) {
 	sqlStr:="select result from stu where stu_id=? and phone=? and qq=?"
 	err:=db.Get(&u,sqlStr,stu_id,phone,qq)
 	if err != nil {
-		if err != nil {
+		
 			fmt.Printf("Queryfield get failed, err:%v\n", err)
 			return u,err
-		}
+		
 	}
 	return u,nil
+}
+
+
+//增加stu的描述信息
+func Updatedes(comments,self_study,attach,development,ready,degree,stu_id string,grades int) error {
+	sqlStr:="update description set comments=?,grades=?,self_study=?,attach=?,development=?,ready=?,degree=? where stu_id=?"
+	_,err:=db.Exec(sqlStr,comments,grades,self_study,attach,development,ready,degree,stu_id)
+	if err != nil {
+		fmt.Printf("Updatedes update failed, err:%v\n", err)
+		return err
+	}
+	return nil
+}
+//查询des所有字段和stu某个字段
+func Querydes(stu_id string) (stu.Des,error) {
+	var des stu.Des
+	sqlStr:="SELECT stu.sex,stu.group_id, stu.real_name, des.stu_id,des.comments,des.grades,des.self_study,des.attach,des.development,des.ready,des.degree FROM stu stu LEFT JOIN description des ON stu.stu_id=des.stu_id where des.stu_id=?;"
+	err:=db.Get(&des,sqlStr,stu_id)
+	if err != nil {
+		fmt.Printf("Querydes get failed, err:%v\n", err)
+			return des,err
+	}
+	return des,nil
+
+}
+
+//修改值
+func updateone(one string,stu_id string) error {
+	var des stu.Des
+	sqlStr:="update description set one=? where stu_id=?"
+	_,err:=db.Exec(sqlStr,one,stu_id)
+	if err != nil {
+		fmt.Printf("updateone update failed, err:%v\n", err)
+		return err
+	}
+	return nil;
+}
+
+//修改值
+func updatetwo(two string,stu_id string) error {
+	var des stu.Des
+	sqlStr:="update description set two=? where stu_id=?"
+	_,err:=db.Exec(sqlStr,two,stu_id)
+	if err != nil {
+		fmt.Printf("updatetwo update failed, err:%v\n", err)
+		return err
+	}
+	return nil;
+}
+
+//查询过一面与二面的人
+func Queryone() ([]stu.Des,error) {
+	var des []stu.User
+	sqlStr:="select * from description where one=?"
+	db.Select(&des,sqlStr,"1")
 }

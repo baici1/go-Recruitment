@@ -12,7 +12,7 @@ package main
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host 47.113.203.60:8081
+// @host 127.0.0.1:8081
 
 import (
 	"fmt"
