@@ -32,6 +32,10 @@ func InitRoute() {
 	{
 		des.POST("/update",api_stu.Updatedes)
 		des.GET("/get",api_stu.Getdes)
+		des.GET("/one",api_stu.Getone)
+		des.GET("/two",api_stu.Gettwo)
+		des.POST("/one",api_stu.Updateone)
+		des.POST("/two",api_stu.Updatetwo)
 	}
 	r.Run(":8081")
 }

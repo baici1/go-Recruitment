@@ -57,3 +57,87 @@ func Getdes(c *gin.Context)  {
 		"data":all,
 	})
 }
+
+func Updateone(c *gin.Context)  {
+	var all stu.Des
+	err:=c.ShouldBind(&all)
+	if err != nil {
+		c.JSON(500,gin.H{
+			"msg":"获取信息失败",
+			"code":"500",
+		})
+		return 
+	}
+	err=mysql.Updateone(all.One,all.Stu_id)
+	if err != nil {
+		c.JSON(403,gin.H{
+			"msg":"修改出错",
+			"code":403,
+		})
+		return
+	}
+	c.JSON(200,gin.H{
+		"msg":"修改成功",
+		"code":20000,
+		"data":all,
+	})
+}
+
+func Updatetwo(c *gin.Context)  {
+	var all stu.Des
+	err:=c.ShouldBind(&all)
+	if err != nil {
+		c.JSON(500,gin.H{
+			"msg":"获取信息失败",
+			"code":"500",
+		})
+		return 
+	}
+	err=mysql.Updatetwo(all.Two,all.Stu_id)
+	if err != nil {
+		c.JSON(403,gin.H{
+			"msg":"修改出错",
+			"code":403,
+		})
+		return
+	}
+	c.JSON(200,gin.H{
+		"msg":"修改成功",
+		"code":20000,
+		"data":all,
+	})
+}
+
+func 	Getone(c *gin.Context)  {
+	var all []stu.Des
+	all,err:=mysql.Queryone()
+	if err != nil {
+		c.JSON(500,gin.H{
+			"msg":"获取信息失败",
+			"code":"500",
+		})
+		return 
+	}
+	c.JSON(200,gin.H{
+		"msg":"获取成功",
+		"code":20000,
+		"data":all,
+	})
+}
+
+func 	Gettwo(c *gin.Context)  {
+	var all []stu.Des
+	all,err:=mysql.Querytwo()
+	if err != nil {
+		c.JSON(500,gin.H{
+			"msg":"获取信息失败",
+			"code":"500",
+		})
+		return 
+	}
+	c.JSON(200,gin.H{
+		"msg":"获取成功",
+		"code":20000,
+		"data":all,
+	})
+}

@@ -159,8 +159,8 @@ func Querydes(stu_id string) (stu.Des,error) {
 }
 
 //修改值
-func updateone(one string,stu_id string) error {
-	var des stu.Des
+func Updateone(one string,stu_id string) error {
+
 	sqlStr:="update description set one=? where stu_id=?"
 	_,err:=db.Exec(sqlStr,one,stu_id)
 	if err != nil {
@@ -171,8 +171,8 @@ func updateone(one string,stu_id string) error {
 }
 
 //修改值
-func updatetwo(two string,stu_id string) error {
-	var des stu.Des
+func Updatetwo(two string,stu_id string) error {
+	
 	sqlStr:="update description set two=? where stu_id=?"
 	_,err:=db.Exec(sqlStr,two,stu_id)
 	if err != nil {
@@ -182,9 +182,26 @@ func updatetwo(two string,stu_id string) error {
 	return nil;
 }
 
-//查询过一面与二面的人
+//查询过一面的人
 func Queryone() ([]stu.Des,error) {
-	var des []stu.User
+	var des []stu.Des
 	sqlStr:="select * from description where one=?"
-	db.Select(&des,sqlStr,"1")
+	err:=db.Select(&des,sqlStr,"1")
+	if err != nil {
+		fmt.Printf("updatetwo update failed, err:%v\n", err)
+		return des,err;
+	}
+	return des,nil;
+}
+
+//查询过二面的人
+func Querytwo() ([]stu.Des,error) {
+	var des []stu.Des
+	sqlStr:="select * from description where two=? and one=?"
+	err:=db.Select(&des,sqlStr,"1","1")
+	if err != nil {
+		fmt.Printf("updatetwo update failed, err:%v\n", err)
+		return des,err;
+	}
+	return des,nil;
 }
