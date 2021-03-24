@@ -148,7 +148,7 @@ func Updatedes(comments,self_study,attach,development,ready,degree,stu_id string
 //查询des所有字段和stu某个字段
 func Querydes(stu_id string) (stu.Des,error) {
 	var des stu.Des
-	sqlStr:="SELECT stu.sex,stu.group_id, stu.real_name, des.stu_id,des.comments,des.grades,des.self_study,des.attach,des.development,des.ready,des.degree FROM stu stu LEFT JOIN description des ON stu.stu_id=des.stu_id where des.stu_id=?;"
+	sqlStr:="SELECT stu.sex,stu.group_id, stu.real_name, des.stu_id,des.comments,des.grades,des.self_study,des.attach,des.development,des.ready,des.degree,des.one,des.two FROM stu stu LEFT JOIN description des ON stu.stu_id=des.stu_id where des.stu_id=?;"
 	err:=db.Get(&des,sqlStr,stu_id)
 	if err != nil {
 		fmt.Printf("Querydes get failed, err:%v\n", err)
@@ -185,7 +185,7 @@ func Updatetwo(two string,stu_id string) error {
 //查询过一面的人
 func Queryone() ([]stu.Des,error) {
 	var des []stu.Des
-	sqlStr:="select * from description where one=?"
+	sqlStr:="SELECT stu.sex,stu.group_id, stu.real_name, des.stu_id,des.comments,des.grades,des.self_study,des.attach,des.development,des.ready,des.degree,des.one,des.two FROM stu stu LEFT JOIN description des ON stu.stu_id=des.stu_id where des.one=?;"
 	err:=db.Select(&des,sqlStr,"1")
 	if err != nil {
 		fmt.Printf("updatetwo update failed, err:%v\n", err)
@@ -197,7 +197,7 @@ func Queryone() ([]stu.Des,error) {
 //查询过二面的人
 func Querytwo() ([]stu.Des,error) {
 	var des []stu.Des
-	sqlStr:="select * from description where two=? and one=?"
+	sqlStr:="SELECT stu.sex,stu.group_id, stu.real_name, des.stu_id,des.comments,des.grades,des.self_study,des.attach,des.development,des.ready,des.degree,des.one,des.two FROM stu stu LEFT JOIN description des ON stu.stu_id=des.stu_id where des.one=? and des.two=?;"
 	err:=db.Select(&des,sqlStr,"1","1")
 	if err != nil {
 		fmt.Printf("updatetwo update failed, err:%v\n", err)

@@ -27,6 +27,6 @@ type Des struct {
 	Development string `json:"development" valid:"required" form:"development"`
 	Ready       string `json:"ready" valid:"required" form:"ready"`
 	Degree      string `json:"degree" valid:"required" form:"degree"`
-	One      string `json:"one" valid:"required" form:"one"`
-	Two      string `json:"two" valid:"required" form:"two"`
+	One         string `json:"one" valid:"required" form:"one"`
+	Two         string `json:"two" valid:"required" form:"two"`
 }
